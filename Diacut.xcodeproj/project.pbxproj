@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D21DB3DE2A17C878006414DF /* NSImage+PNGData.swift in Sources */ = {isa = PBXBuildFile; fileRef = D21DB3DD2A17C878006414DF /* NSImage+PNGData.swift */; };
 		D22DC1702A0CD37C009E212B /* DiacutApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22DC16F2A0CD37C009E212B /* DiacutApp.swift */; };
 		D22DC1722A0CD37C009E212B /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22DC1712A0CD37C009E212B /* ContentView.swift */; };
 		D22DC1742A0CD37F009E212B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D22DC1732A0CD37F009E212B /* Assets.xcassets */; };
@@ -14,6 +15,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		D21DB3DD2A17C878006414DF /* NSImage+PNGData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSImage+PNGData.swift"; sourceTree = "<group>"; };
 		D22DC16C2A0CD37C009E212B /* Diacut.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Diacut.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D22DC16F2A0CD37C009E212B /* DiacutApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiacutApp.swift; sourceTree = "<group>"; };
 		D22DC1712A0CD37C009E212B /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -57,6 +59,7 @@
 				D22DC1732A0CD37F009E212B /* Assets.xcassets */,
 				D22DC1782A0CD37F009E212B /* Diacut.entitlements */,
 				D22DC1752A0CD37F009E212B /* Preview Content */,
+				D21DB3DD2A17C878006414DF /* NSImage+PNGData.swift */,
 			);
 			path = Diacut;
 			sourceTree = "<group>";
@@ -141,6 +144,7 @@
 			files = (
 				D22DC1722A0CD37C009E212B /* ContentView.swift in Sources */,
 				D22DC1702A0CD37C009E212B /* DiacutApp.swift in Sources */,
+				D21DB3DE2A17C878006414DF /* NSImage+PNGData.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

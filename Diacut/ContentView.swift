@@ -213,8 +213,7 @@ struct ContentView: View {
     }
     
     private func saveAsPng(image: NSImage, path: String) {
-        let imageRep = NSBitmapImageRep(data: image.tiffRepresentation!)
-        let pngData = imageRep?.representation(using: .png, properties: [:])
+        let pngData = image.pngData(size: CGSize(width: image.size.width, height: image.size.height))
         
         do {
             try pngData!.write(to: URL(fileURLWithPath: path))
