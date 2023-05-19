@@ -13,11 +13,16 @@ struct ContentView: View {
     
     @State private var isDropTargeted = false
     @State private var nsImage = NSImage(named: "512x288")!
-    @State private var trimWidth = "224"
+    @State private var trimWidth = "512"
     @State private var trimHeight = "288"
-    @State private var trimX = "144"
+    @State private var trimX = "0"
     @State private var trimY = "0"
+    @State private var leftTop: CGPoint = CGPoint(x: 0, y: 0)
+    @State private var rightTop: CGPoint = CGPoint(x: 512, y: 0)
+    @State private var rightBottom: CGPoint = CGPoint(x: 512, y: 288)
+    @State private var leftBottom: CGPoint = CGPoint(x: 0, y: 288)
     
+    // FIXME
     @State private var actualTrimWidth = "0"
     @State private var actualTrimHeight = "0"
     @State private var actualTrimX = "0"
@@ -25,16 +30,11 @@ struct ContentView: View {
     
     var body: some View {
         ZStack {
-            let leftTop = pathLeftTop()
-            let rightTop = pathRightTop(pathLeftTop: leftTop)
-            let rightBottom = pathRightBottom(pathRightTop: rightTop)
-            let leftBottom = pathLeftBottom(pathLeftTop: leftTop)
-            
-            Image(nsImage: self.nsImage)
+            Image(nsImage: nsImage)
                 .resizable()
                 .scaledToFit()
                 .frame(width: DEFAULT_FRAME_WIDTH, height: DEFAULT_FRAME_HEIGHT)
-                .onDrop(of: [kUTTypeFileURL as String], isTargeted: $isDropTargeted, perform: self.processDroppedFile(provideres:))
+                .onDrop(of: [kUTTypeFileURL as String], isTargeted: $isDropTargeted, perform: processDroppedFile(provideres:))
                 .overlay(
                     Path { path in
                         path.move(to: leftTop)
@@ -55,19 +55,19 @@ struct ContentView: View {
             Text("Prev").font(.largeTitle).fontWeight(.ultraLight)
             
             TextField("Trim width", text: $trimWidth, onCommit: {
-                calcActualTrimWidth()
+                resetTrimRect(isManual: true)
             }).font(.largeTitle).fontWeight(.ultraLight)
             
             TextField("Trim height", text: $trimHeight, onCommit: {
-                calcActualTrimHeight()
+                resetTrimRect(isManual: true)
             }).font(.largeTitle).fontWeight(.ultraLight)
             
             TextField("X", text: $trimX, onCommit: {
-                calcActualTrimX()
+                resetTrimRect(isManual: true)
             }).font(.largeTitle).fontWeight(.ultraLight)
             
             TextField("Y", text: $trimY, onCommit: {
-                calcActualTrimY()
+                resetTrimRect(isManual: true)
             }).font(.largeTitle).fontWeight(.ultraLight)
         }
         
@@ -94,6 +94,33 @@ struct ContentView: View {
         .padding()
     }
     
+    private func resetTrimRect(isManual: Bool = false) {
+        if !isManual {
+            trimWidth = String(Int(Float(nsImage.size.width) / calcYScale()))
+            
+            if Int(trimWidth) ?? 0 > Int(DEFAULT_FRAME_WIDTH) {
+                trimWidth = String(Int(Float(nsImage.size.width) / calcXScale()))
+                trimHeight = String(Int(Float(nsImage.size.height) / calcXScale()))
+                trimX = "0"
+                trimY = String(Int((Int(DEFAULT_FRAME_HEIGHT) - (Int(trimHeight) ?? 0)) / 2))
+            } else {
+                trimHeight = String(Int(Float(nsImage.size.height) / calcYScale()))
+                trimX = String(Int((Int(DEFAULT_FRAME_WIDTH) - (Int(trimWidth) ?? 0)) / 2))
+                trimY = "0"
+            }
+        }
+        
+        leftTop = pathLeftTop()
+        rightTop = pathRightTop(pathLeftTop: leftTop)
+        rightBottom = pathRightBottom(pathRightTop: rightTop)
+        leftBottom = pathLeftBottom(pathLeftTop: leftTop)
+        
+        calcActualTrimWidth()
+        calcActualTrimHeight()
+        calcActualTrimX()
+        calcActualTrimY()
+    }
+    
     private func processDroppedFile(provideres: [NSItemProvider]) -> Bool {
         guard let provider = provideres.first else { return false }
         provider.loadItem(forTypeIdentifier: (kUTTypeFileURL as String), options: nil) { (urlData, error) in
@@ -101,11 +128,13 @@ struct ContentView: View {
                 if let urlData = urlData as? Data {
                     let imageURL = NSURL(absoluteURLWithDataRepresentation: urlData, relativeTo: nil) as URL
                     if let localImage = NSImage(contentsOf: imageURL) {
-                        self.nsImage = localImage
+                        nsImage = localImage
+                        resetTrimRect()
                     }
                 }
             }
         }
+        
         return true
     }
     
@@ -152,33 +181,33 @@ struct ContentView: View {
     }
     
     private func calcActualTrimWidth() {
-        let width = (Float(self.trimWidth) ?? 0.0) * calcXScale()
+        let width = (Float(trimWidth) ?? 0.0) * calcXScale()
         
         if Int(width) > Int(nsImage.size.width) {
-            self.actualTrimWidth = String(Int(nsImage.size.width))
+            actualTrimWidth = String(Int(nsImage.size.width))
         } else {
-            self.actualTrimWidth = String(Int(width))
+            actualTrimWidth = String(Int(width))
         }
     }
     
     private func calcActualTrimHeight() {
-        let height = (Float(self.trimHeight) ?? 0.0) * calcYScale()
+        let height = (Float(trimHeight) ?? 0.0) * calcYScale()
         
         if Int(height) > Int(nsImage.size.height) {
-            self.actualTrimHeight = String(Int(nsImage.size.height))
+            actualTrimHeight = String(Int(nsImage.size.height))
         } else {
-            self.actualTrimHeight = String(Int(height))
+            actualTrimHeight = String(Int(height))
         }
     }
     
     private func calcActualTrimX() {
-        let x = (Float(self.trimX) ?? 0.0) * calcXScale()
-        self.actualTrimX =  String(Int(x))
+        let x = (Float(trimX) ?? 0.0) * calcXScale()
+        actualTrimX =  String(Int(x))
     }
     
     private func calcActualTrimY() {
-        let y = (Float(self.trimY) ?? 0.0) * calcYScale()
-        self.actualTrimY =  String(Int(y))
+        let y = (Float(trimY) ?? 0.0) * calcYScale()
+        actualTrimY =  String(Int(y))
     }
     
     private func clickSaveButton() {
