@@ -95,11 +95,18 @@ struct ContentView: View {
     
     private func resetTrimRect(isManual: Bool = false) {
         if !isManual {
+            print("drop to reset")
+            
             if prevWidth == nil {
                 prevWidth = Int(nsImage.size.width)
                 prevHeight = Int(nsImage.size.height)
             } else if prevWidth == Int(nsImage.size.width) && prevHeight == Int(nsImage.size.height) {
+                print("same image size")
                 return
+            } else {
+                print("different image size")
+                prevWidth = Int(nsImage.size.width)
+                prevHeight = Int(nsImage.size.height)
             }
             
             actualTrimWidth = String(Int(nsImage.size.width))
