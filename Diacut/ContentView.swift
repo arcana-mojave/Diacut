@@ -13,6 +13,8 @@ struct ContentView: View {
     
     @State private var isDropTargeted = false
     @State private var nsImage = NSImage(named: "512x288")!
+    @State private var prevWidth: Int? = nil
+    @State private var prevHeight: Int? = nil
     
     @State private var virtualWidth = "512"
     @State private var virtualHeight = "288"
@@ -47,43 +49,39 @@ struct ContentView: View {
                         path.closeSubpath()
                     }.stroke().fill(Color.green)
                 )
-        }
+        }.padding()
         
         HStack {
-            Text("Image width: \(Int(nsImage.size.width))").font(.largeTitle).fontWeight(.ultraLight)
-            Text("Image height: \(Int(nsImage.size.height))").font(.largeTitle).fontWeight(.ultraLight)
-        }
+            Text("Image").font(.largeTitle).fontWeight(.ultraLight)
+            Text("width: \(Int(nsImage.size.width))").font(.largeTitle).fontWeight(.ultraLight)
+            Text("height: \(Int(nsImage.size.height))").font(.largeTitle).fontWeight(.ultraLight)
+        }.padding()
         
         HStack {
-            Text("Actual").font(.largeTitle).fontWeight(.ultraLight)
+            Text("Trim").font(.largeTitle).fontWeight(.ultraLight)
             
-            TextField("Trim width", text: $actualTrimWidth, onCommit: {
+            Text("width:").font(.largeTitle).fontWeight(.ultraLight)
+            TextField("", text: $actualTrimWidth, onCommit: {
                 resetTrimRect(isManual: true)
             }).font(.largeTitle).fontWeight(.ultraLight)
             
-            TextField("Trim height", text: $actualTrimHeight, onCommit: {
+            Text("height:").font(.largeTitle).fontWeight(.ultraLight)
+            TextField("", text: $actualTrimHeight, onCommit: {
                 resetTrimRect(isManual: true)
             }).font(.largeTitle).fontWeight(.ultraLight)
             
-            TextField("X", text: $actualTrimX, onCommit: {
+            Text("X:").font(.largeTitle).fontWeight(.ultraLight)
+            TextField("", text: $actualTrimX, onCommit: {
                 resetTrimRect(isManual: true)
             }).font(.largeTitle).fontWeight(.ultraLight)
             
-            TextField("Y", text: $actualTrimY, onCommit: {
+            Text("Y:").font(.largeTitle).fontWeight(.ultraLight)
+            TextField("", text: $actualTrimY, onCommit: {
                 resetTrimRect(isManual: true)
             }).font(.largeTitle).fontWeight(.ultraLight)
-        }
+        }.padding()
         
         HStack {
-            Text("Virtual").font(.largeTitle).fontWeight(.ultraLight)
-            Text("Trim width: \(virtualWidth)").font(.largeTitle).fontWeight(.ultraLight)
-            Text("Trim height: \(virtualHeight)").font(.largeTitle).fontWeight(.ultraLight)
-            Text("X: \(virtualX)").font(.largeTitle).fontWeight(.ultraLight)
-            Text("Y: \(virtualY)").font(.largeTitle).fontWeight(.ultraLight)
-        }
-        
-        HStack {
-            Spacer()
             Button(action: {
                 clickSaveButton()
             }) {
@@ -92,13 +90,18 @@ struct ContentView: View {
                     Text("Trim to Save")
                 }
             }
-            Spacer()
-        }
-        .padding()
+        }.padding()
     }
     
     private func resetTrimRect(isManual: Bool = false) {
         if !isManual {
+            if prevWidth == nil {
+                prevWidth = Int(nsImage.size.width)
+                prevHeight = Int(nsImage.size.height)
+            } else if prevWidth == Int(nsImage.size.width) && prevHeight == Int(nsImage.size.height) {
+                return
+            }
+            
             actualTrimWidth = String(Int(nsImage.size.width))
             actualTrimHeight = String(Int(nsImage.size.height))
             actualTrimX = "0"
@@ -138,6 +141,8 @@ struct ContentView: View {
         rightTop = pathRightTop(pathLeftTop: leftTop)
         rightBottom = pathRightBottom(pathRightTop: rightTop)
         leftBottom = pathLeftBottom(pathLeftTop: leftTop)
+        
+        print("virtualWidth=\(virtualWidth) virtualHeight=\(virtualHeight) virtualX=\(virtualX) virtualY=\(virtualY)")
     }
     
     private func processDroppedFile(provideres: [NSItemProvider]) -> Bool {
