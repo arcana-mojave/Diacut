@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import UniformTypeIdentifiers
 
 struct ContentView: View {
     private let DEFAULT_FRAME_WIDTH: CGFloat = 512.0
@@ -39,7 +40,7 @@ struct ContentView: View {
                 .resizable()
                 .scaledToFit()
                 .frame(width: DEFAULT_FRAME_WIDTH, height: DEFAULT_FRAME_HEIGHT)
-                .onDrop(of: [kUTTypeFileURL as String], isTargeted: $isDropTargeted, perform: processDroppedFile(provideres:))
+                .onDrop(of: [UTType.image.identifier as String], isTargeted: $isDropTargeted, perform: processDroppedFile(provideres:))
                 .overlay(
                     Path { path in
                         path.move(to: leftTop)
@@ -154,7 +155,7 @@ struct ContentView: View {
     
     private func processDroppedFile(provideres: [NSItemProvider]) -> Bool {
         guard let provider = provideres.first else { return false }
-        provider.loadItem(forTypeIdentifier: (kUTTypeFileURL as String), options: nil) { (urlData, error) in
+        provider.loadItem(forTypeIdentifier: (UTType.image.identifier as String), options: nil) { (urlData, error) in
             DispatchQueue.main.async {
                 if let urlData = urlData as? Data {
                     let imageURL = NSURL(absoluteURLWithDataRepresentation: urlData, relativeTo: nil) as URL
