@@ -40,7 +40,7 @@ struct ContentView: View {
                 .resizable()
                 .scaledToFit()
                 .frame(width: DEFAULT_FRAME_WIDTH, height: DEFAULT_FRAME_HEIGHT)
-                .onDrop(of: [UTType.image.identifier as String], isTargeted: $isDropTargeted, perform: processDroppedFile(provideres:))
+                .onDrop(of: [.image], isTargeted: $isDropTargeted, perform: processDroppedFile(provideres:))
                 .overlay(
                     Path { path in
                         path.move(to: leftTop)
@@ -155,18 +155,19 @@ struct ContentView: View {
     
     private func processDroppedFile(provideres: [NSItemProvider]) -> Bool {
         guard let provider = provideres.first else { return false }
-        provider.loadItem(forTypeIdentifier: (UTType.image.identifier as String), options: nil) { (urlData, error) in
-            DispatchQueue.main.async {
-                if let urlData = urlData as? Data {
-                    let imageURL = NSURL(absoluteURLWithDataRepresentation: urlData, relativeTo: nil) as URL
-                    if let localImage = NSImage(contentsOf: imageURL) {
-                        nsImage = localImage
-                        resetTrimRect()
-                    }
+        
+        if provider.hasItemConformingToTypeIdentifier(UTType.image.identifier) {
+            provider.loadItem(forTypeIdentifier: UTType.image.identifier, options: nil) { (urlData, error) in
+                DispatchQueue.main.async {
+                    guard error == nil,
+                          let url = urlData as? URL,
+                          let loadedImage = NSImage(contentsOf: url)
+                    else { return }
+                    nsImage = loadedImage
+                    resetTrimRect()
                 }
             }
         }
-        
         return true
     }
     
