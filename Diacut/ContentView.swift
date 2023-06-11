@@ -34,6 +34,9 @@ struct ContentView: View {
     @State private var actualTrimX = "0"
     @State private var actualTrimY = "0"
     
+    private let selectFormats = ["png", "jpg"]
+    @State private var selectedFormatIndex = 0
+    
     var body: some View {
         ZStack {
             Image(nsImage: nsImage)
@@ -87,6 +90,20 @@ struct ContentView: View {
         }.padding()
         
         HStack {
+            VStack {
+                ForEach(0..<selectFormats.count, id: \.self, content: { index in
+                    HStack {
+                        Text(selectFormats[index])
+                        Image(systemName: selectedFormatIndex == index ? "checkmark.circle.fill" : "circle")
+                            .foregroundColor(.blue)
+                    }
+                    .frame(height: 40)
+                    .onTapGesture {
+                        selectedFormatIndex = index
+                    }
+                })
+            }
+            
             Button(action: {
                 clickSaveButton()
             }) {
@@ -121,11 +138,9 @@ struct ContentView: View {
         } else {
             if ((Int(actualTrimX) ?? 0) + (Int(actualTrimWidth) ?? 0)) > Int(nsImage.size.width) {
                 actualTrimWidth = String(Int(nsImage.size.width) - (Int(actualTrimX) ?? 0))
-                print(actualTrimWidth)
             }
             if ((Int(actualTrimY) ?? 0) + (Int(actualTrimHeight) ?? 0)) > Int(nsImage.size.height) {
                 actualTrimHeight = String(Int(nsImage.size.height) - (Int(actualTrimY) ?? 0))
-                print(actualTrimHeight)
             }
         }
         
@@ -221,7 +236,10 @@ struct ContentView: View {
         
         let trimmedImage = trim(image: nsImage, rect: rect)
         
-        saveAsPng(image: trimmedImage, path: NSHomeDirectory() + "/Downloads/\(genFileName()).png")
+        var isPng = true
+        if selectedFormatIndex != 0 { isPng = false }
+        
+        save(image: trimmedImage, path: NSHomeDirectory() + "/Downloads/\(genFileName())", isPng: isPng)
     }
     
     private func trim(image: NSImage, rect: CGRect) -> NSImage {
@@ -242,11 +260,20 @@ struct ContentView: View {
         return formatter.string(from: Date())
     }
     
-    private func saveAsPng(image: NSImage, path: String) {
-        let pngData = image.pngData(size: CGSize(width: image.size.width, height: image.size.height))
+    private func save(image: NSImage, path: String, isPng: Bool) {
+        var data: Data?
+        var pathWithExt = path
+        
+        if isPng {
+            data = image.pngData(size: CGSize(width: image.size.width, height: image.size.height))
+            pathWithExt += ".png"
+        } else {
+            data = image.jpgData(size: CGSize(width: image.size.width, height: image.size.height))
+            pathWithExt += ".jpg"
+        }
         
         do {
-            try pngData!.write(to: URL(fileURLWithPath: path))
+            try data!.write(to: URL(fileURLWithPath: pathWithExt))
         } catch {
             print(error)
         }
