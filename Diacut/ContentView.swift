@@ -62,24 +62,28 @@ struct ContentView: View {
             Text("Trim").font(.largeTitle).fontWeight(.ultraLight)
             
             Text("width:").font(.largeTitle).fontWeight(.ultraLight)
-            TextField("", text: $actualTrimWidth, onCommit: {
-                resetTrimRect(isManual: true)
-            }).font(.largeTitle).fontWeight(.ultraLight)
+            TextField("", text: $actualTrimWidth).font(.largeTitle).fontWeight(.ultraLight)
+                .onSubmit {
+                    resetTrimRect(isManual: true)
+                }
             
             Text("height:").font(.largeTitle).fontWeight(.ultraLight)
-            TextField("", text: $actualTrimHeight, onCommit: {
-                resetTrimRect(isManual: true)
-            }).font(.largeTitle).fontWeight(.ultraLight)
+            TextField("", text: $actualTrimHeight).font(.largeTitle).fontWeight(.ultraLight)
+                .onSubmit {
+                    resetTrimRect(isManual: true)
+                }
             
             Text("X:").font(.largeTitle).fontWeight(.ultraLight)
-            TextField("", text: $actualTrimX, onCommit: {
-                resetTrimRect(isManual: true)
-            }).font(.largeTitle).fontWeight(.ultraLight)
+            TextField("", text: $actualTrimX).font(.largeTitle).fontWeight(.ultraLight)
+                .onSubmit {
+                    resetTrimRect(isManual: true)
+                }
             
             Text("Y:").font(.largeTitle).fontWeight(.ultraLight)
-            TextField("", text: $actualTrimY, onCommit: {
-                resetTrimRect(isManual: true)
-            }).font(.largeTitle).fontWeight(.ultraLight)
+            TextField("", text: $actualTrimY).font(.largeTitle).fontWeight(.ultraLight)
+                .onSubmit {
+                    resetTrimRect(isManual: true)
+                }
         }.padding()
         
         HStack {
@@ -114,6 +118,15 @@ struct ContentView: View {
             actualTrimHeight = String(Int(nsImage.size.height))
             actualTrimX = "0"
             actualTrimY = "0"
+        } else {
+            if ((Int(actualTrimX) ?? 0) + (Int(actualTrimWidth) ?? 0)) > Int(nsImage.size.width) {
+                actualTrimWidth = String(Int(nsImage.size.width) - (Int(actualTrimX) ?? 0))
+                print(actualTrimWidth)
+            }
+            if ((Int(actualTrimY) ?? 0) + (Int(actualTrimHeight) ?? 0)) > Int(nsImage.size.height) {
+                actualTrimHeight = String(Int(nsImage.size.height) - (Int(actualTrimY) ?? 0))
+                print(actualTrimHeight)
+            }
         }
         
         virtualWidth = String(Int((Float(actualTrimWidth) ?? 0.0) / calcYScale()))
