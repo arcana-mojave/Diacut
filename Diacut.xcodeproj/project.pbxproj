@@ -12,6 +12,7 @@
 		D22DC1722A0CD37C009E212B /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22DC1712A0CD37C009E212B /* ContentView.swift */; };
 		D22DC1742A0CD37F009E212B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D22DC1732A0CD37F009E212B /* Assets.xcassets */; };
 		D22DC1772A0CD37F009E212B /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D22DC1762A0CD37F009E212B /* Preview Assets.xcassets */; };
+		D25DF9C52A35CAEB0061BCC6 /* icon.icns in Resources */ = {isa = PBXBuildFile; fileRef = D25DF9C42A35CAEB0061BCC6 /* icon.icns */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -22,6 +23,8 @@
 		D22DC1732A0CD37F009E212B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D22DC1762A0CD37F009E212B /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		D22DC1782A0CD37F009E212B /* Diacut.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Diacut.entitlements; sourceTree = "<group>"; };
+		D25DF9C12A35C1AA0061BCC6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		D25DF9C42A35CAEB0061BCC6 /* icon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = icon.icns; path = ../../../top/icon/icon.icns; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -54,6 +57,8 @@
 		D22DC16E2A0CD37C009E212B /* Diacut */ = {
 			isa = PBXGroup;
 			children = (
+				D25DF9C42A35CAEB0061BCC6 /* icon.icns */,
+				D25DF9C12A35C1AA0061BCC6 /* Info.plist */,
 				D22DC16F2A0CD37C009E212B /* DiacutApp.swift */,
 				D22DC1712A0CD37C009E212B /* ContentView.swift */,
 				D22DC1732A0CD37F009E212B /* Assets.xcassets */,
@@ -132,6 +137,7 @@
 			files = (
 				D22DC1772A0CD37F009E212B /* Preview Assets.xcassets in Resources */,
 				D22DC1742A0CD37F009E212B /* Assets.xcassets in Resources */,
+				D25DF9C52A35CAEB0061BCC6 /* icon.icns in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -279,6 +285,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Diacut/Info.plist;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -307,6 +314,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Diacut/Info.plist;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
