@@ -17,6 +17,7 @@ struct ContentView: View {
     @State private var prevWidth: Int? = nil
     @State private var prevHeight: Int? = nil
     
+    @State private var isXScale = true
     @State private var virtualWidth = "512"
     @State private var virtualHeight = "288"
     @State private var virtualX = "0"
@@ -135,6 +136,14 @@ struct ContentView: View {
             actualTrimHeight = String(Int(nsImage.size.height))
             actualTrimX = "0"
             actualTrimY = "0"
+            
+            virtualWidth = String(Int((Float(actualTrimWidth) ?? 0.0) / calcYScale()))
+            
+            if (Int(virtualWidth) ?? 0) > Int(DEFAULT_FRAME_WIDTH) {
+                isXScale = true
+            } else {
+                isXScale = false
+            }
         } else {
             if ((Int(actualTrimX) ?? 0) + (Int(actualTrimWidth) ?? 0)) > Int(nsImage.size.width) {
                 actualTrimWidth = String(Int(nsImage.size.width) - (Int(actualTrimX) ?? 0))
@@ -144,9 +153,7 @@ struct ContentView: View {
             }
         }
         
-        virtualWidth = String(Int((Float(actualTrimWidth) ?? 0.0) / calcYScale()))
-        
-        if (Int(virtualWidth) ?? 0) > Int(DEFAULT_FRAME_WIDTH) {
+        if (isXScale) {
             virtualWidth = String(Int((Float(actualTrimWidth) ?? 0.0) / calcXScale()))
             virtualHeight = String(Int((Float(actualTrimHeight) ?? 0.0) / calcXScale()))
             
@@ -160,6 +167,7 @@ struct ContentView: View {
                 virtualY = String(Int(((Float(actualTrimY) ?? 0.0) / calcXScale()) + Float(initY)))
             }
         } else {
+            virtualWidth = String(Int((Float(actualTrimWidth) ?? 0.0) / calcYScale()))
             virtualHeight = String(Int((Float(actualTrimHeight) ?? 0.0) / calcYScale()))
             
             if !isManual {
