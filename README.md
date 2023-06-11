@@ -1,5 +1,8 @@
 # Diacut
-Simple image trimming tool for macOS
+Simple image trimming tool for macOS.
+
+## Requirements
+macOS 13.3 or later
 
 ## Usage
 1. Drop image file.
