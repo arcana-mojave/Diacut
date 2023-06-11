@@ -1,5 +1,5 @@
 //
-//  NSImage+PNGData.swift
+//  NSImage+PNGorJPGData.swift
 //  Diacut
 //  
 //  Created by arcana-mojave on 2023/05/20.
@@ -12,6 +12,21 @@ import AppKit
 extension NSImage {
     func pngData(
         size: CGSize,
+        imageInterpolation: NSImageInterpolation = .high
+    ) -> Data? {
+        data(size: size, fileType: .png, imageInterpolation: imageInterpolation)
+    }
+    
+    func jpgData(
+        size: CGSize,
+        imageInterpolation: NSImageInterpolation = .high
+    ) -> Data? {
+        data(size: size, fileType: .jpeg, imageInterpolation: imageInterpolation)
+    }
+    
+    private func data(
+        size: CGSize,
+        fileType: NSBitmapImageRep.FileType,
         imageInterpolation: NSImageInterpolation = .high
     ) -> Data? {
         guard let bitmap = NSBitmapImageRep(
@@ -42,6 +57,6 @@ extension NSImage {
         )
         NSGraphicsContext.restoreGraphicsState()
         
-        return bitmap.representation(using: .png, properties: [:])
+        return bitmap.representation(using: fileType, properties: [:])
     }
 }
